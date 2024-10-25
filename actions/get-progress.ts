@@ -5,6 +5,7 @@ export async function getProgress(userId: string, courseId: string): Promise<num
     const publishedChapters = await db.chapter.findMany({
       where: { courseId, isPublished: true },
       select: { id: true },
+      cacheStrategy: { ttl: 60 },
     })
     const publishedChapterIds = publishedChapters.map((chapter) => chapter.id)
 

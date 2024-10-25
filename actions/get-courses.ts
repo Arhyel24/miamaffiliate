@@ -30,6 +30,7 @@ export async function getCourses({
       orderBy: {
         createdAt: 'desc',
       },
+      cacheStrategy: { ttl: 60 },
     })
 
     const coursesWithProgress: CourseWithProgressAndCategory[] = await Promise.all(
