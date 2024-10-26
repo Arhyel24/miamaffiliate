@@ -32,7 +32,7 @@ export async function getAnalytics(userId: string) {
       total,
     }))
 
-    const totalRevenue = data.redu#ce((acc, curr) => acc + curr.total, 0)
+    const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0)
     const totalSales = purchases.length
 
     return {
