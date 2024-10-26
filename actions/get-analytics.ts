@@ -20,7 +20,7 @@ function groupByCourse(purchases: PurchaseWithCourse[]) {
 
 export async function getAnalytics(userId: string) {
   try {
-    const purchases = await db.purchase.findMany({
+    const purchases = await db.purchase.findManydb<PurchaseFindManyArgs>({
       where: { course: { createdById: userId } },
       include: { course: true },
       cacheStrategy: { ttl: 60 },
