@@ -23,7 +23,7 @@ export async function getAnalytics(userId: string) {
     const purchases = await db.purchase.findMany({
       where: { course: { createdById: userId } },
       include: { course: true },
-      cacheStrategy: { ttl: 60 },
+      //cacheStrategy: { ttl: 60 },
     })
 
     const groupedEarnings = groupByCourse(purchases)
