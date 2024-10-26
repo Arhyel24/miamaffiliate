@@ -21,10 +21,14 @@ function groupByCourse(purchases: PurchaseWithCourse[]) {
 export async function getAnalytics(userId: string) {
   try {
     const purchases = await db.purchase.findMany({
-      where: { course: { createdById: userId } },
+      where: { 
+        course: { 
+          createdById: userId, 
+          } 
+      },
       include: { course: true },
       //cacheStrategy: { ttl: 60 },
-    })
+    });
 
     const groupedEarnings = groupByCourse(purchases)
     const data = Object.entries(groupedEarnings).map(([courseTitle, total]) => ({
