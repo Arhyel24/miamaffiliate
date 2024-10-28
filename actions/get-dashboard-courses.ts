@@ -16,7 +16,7 @@ export async function getDashboardCourses(userId: string): Promise<DashboardCour
     const purchasedCourses = await db.purchase.findMany({
       where: { userId },
       select: { course: { include: { category: true, chapters: { where: { isPublished: true } } } } }, 
-      cacheStrategy: { ttl: 60 },
+      //cacheStrategy: { ttl: 60 },
     })
 
     const courses = purchasedCourses.map((purchase) => purchase.course) as CourseWithProgressAndCategory[]
