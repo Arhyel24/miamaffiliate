@@ -1,54 +1,53 @@
-import { Prisma } from '@prisma/client'
-import { db } from '@/lib/db'
+import { Purchase } from '@/models/Purchase' // Adjust the import based on your file structure
 
-type PurchaseWithCourse = Prisma.PurchaseGetPayload<{ include: { course: true } }>
+type PurchaseWithCourse = {
+  course: {
+    title: string;
+    price: number;
+  };
+};
 
 function groupByCourse(purchases: PurchaseWithCourse[]) {
-  const grouped: { [courseTitle: string]: number } = {}
+  const grouped: { [courseTitle: string]: number } = {};
 
   purchases.forEach((purchase) => {
-    const courseTitle = purchase.course.title
+    const courseTitle = purchase.course.title;
     if (!grouped[courseTitle]) {
-      grouped[courseTitle] = 0
+      grouped[courseTitle] = 0;
     }
 
-    grouped[courseTitle] += purchase.course.price!
-  })
+    grouped[courseTitle] += purchase.course.price;
+  });
 
-  return grouped
+  return grouped;
 }
 
 export async function getAnalytics(userId: string) {
   try {
-    const purchases = await db.purchase.findMany({
-      where: { 
-        course: { 
-          createdById: userId, 
-          } 
-      },
-      include: { course: true },
-      //cacheStrategy: { ttl: 60 },
-    });
+    const purchases = await Purchase.find({ 'course.createdById': userId })
+      .populate('course') // Populate the course details
+      .exec();
 
-    const groupedEarnings = groupByCourse(purchases)
+    const groupedEarnings = groupByCourse(purchases);
     const data = Object.entries(groupedEarnings).map(([courseTitle, total]) => ({
       name: courseTitle,
       total,
-    }))
+    }));
 
-    const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0)
-    const totalSales = purchases.length
+    const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0);
+    const totalSales = purchases.length;
 
     return {
       data,
       totalRevenue,
       totalSales,
-    }
-  } catch {
+    };
+  } catch (error) {
+    console.error(error); // Log the error for debugging
     return {
       data: [],
       totalRevenue: 0,
       totalSales: 0,
-    }
+    };
   }
 }
