@@ -1,6 +1,6 @@
 {
-  "name": "next-lms",
-  "version": "0.1.0",
+  "name": "miamaffiliate",
+  "version": "3.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
