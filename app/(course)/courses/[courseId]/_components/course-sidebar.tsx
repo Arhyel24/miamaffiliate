@@ -1,13 +1,10 @@
-import { auth } from '@clerk/nextjs'
-import { Prisma } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import CourseSidebarItem from './course-sidebar-item'
 import { CourseProgress } from '@/components/course-progress'
 
 type CourseSidebarProps = {
-  course: Prisma.CourseGetPayload<{ include: { chapters: { include: { userProgress: true } } } }>
-  progressCount: number
+  
 }
 
 export default async function CourseSidebar({ course, progressCount }: CourseSidebarProps) {
